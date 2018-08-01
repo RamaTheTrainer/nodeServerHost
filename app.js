@@ -3,6 +3,9 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+
+
+app.set('port',process.env.PORT)
 // var options = {
 //     // Initialization Options
 //     promiseLib: promise
@@ -24,14 +27,14 @@ app.all("*", function (req, res, next) {
     return next();
 });
 
-function SaveChatData(fUser,tUser,msg){
-    var dt = new Date();
-    var db = pgp(cs);
-    db.none("insert into chatInfo(frmuser,touser,msg,datetime) values($1,$2,$3,$4)", [fUser,tUser,msg,dt.toLocaleDateString()+'|'+ dt.toTimeString()]).then((data) => {
-        console.log('caht saved to db ..')
-    })
-    pgp.end();
-}
+// function SaveChatData(fUser,tUser,msg){
+//     var dt = new Date();
+//     var db = pgp(cs);
+//     db.none("insert into chatInfo(frmuser,touser,msg,datetime) values($1,$2,$3,$4)", [fUser,tUser,msg,dt.toLocaleDateString()+'|'+ dt.toTimeString()]).then((data) => {
+//         console.log('caht saved to db ..')
+//     })
+//     pgp.end();
+// }
 
 
 app.get('/', function (req, res) {
@@ -98,8 +101,8 @@ io.on('connection', function (socket) {
     });
 });
 
-http.listen(5000, function () {
-    console.log('listening on localhost:http://localhost:5000');
+http.listen(app.get('port'), function () {
+    console.log('listening on localhost:http://localhost:'+app.get('port'));
 });
 
 
